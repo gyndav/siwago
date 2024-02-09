@@ -10,13 +10,13 @@ import (
 	"time"
 )
 
-//struct for JWT Header
+// struct for JWT Header
 type JWTTokenHeader struct {
 	Alg string `json:"alg"`
 	Kid string `json:"kid"`
 }
 
-//struct for JWT Body
+// struct for JWT Body
 type JWTTokenBody struct {
 	Iss            string `json:"iss"`
 	Iat            int64  `json:"iat"`
@@ -25,14 +25,14 @@ type JWTTokenBody struct {
 	Sub            string `json:"sub"`
 	AtHash         string `json:"at_hash"`
 	Email          string `json:"email"`
-	EmailVerified  string `json:"email_verified"`
-	IsPrivateEmail string `json:"is_private_email"`
+	EmailVerified  bool   `json:"email_verified"`
+	IsPrivateEmail bool   `json:"is_private_email"`
 	RealUserStatus int64  `json:"real_user_status"`
 	AuthTime       int64  `json:"auth_time"`
 	Nonce          string `json:"nonce"`
 }
 
-//struct to hold the decoded idtoken
+// struct to hold the decoded idtoken
 type SiwaIdToken struct {
 	Header    *JWTTokenHeader
 	Body      *JWTTokenBody
@@ -40,7 +40,7 @@ type SiwaIdToken struct {
 	Valid     bool
 }
 
-//struct for token returned from apple
+// struct for token returned from apple
 type Token struct {
 	//(Reserved for future use) A token used to access allowed data. Currently, no data set has been defined for access.
 	AccessToken string `json:"access_token"`
@@ -69,7 +69,7 @@ func (self Token) String() string {
 		self.AccessToken, self.TokenType, self.ExpiresIn, self.RefreshToken, self.IdToken, self.Error, self.Valid)
 }
 
-//function to verify idtoken signature for apple published public key
+// function to verify idtoken signature for apple published public key
 func verifyAppleRSA256(message string, signature []byte, kid string) bool {
 	var rsaPublicKey *rsa.PublicKey
 	var err error
@@ -90,13 +90,13 @@ func verifyAppleRSA256(message string, signature []byte, kid string) bool {
 	return true
 }
 
-//validates idToken without nonce check
+// validates idToken without nonce check
 func ValidateIdToken(aud string, idToken string) (*SiwaIdToken, string) {
 	return ValidateIdTokenWithNonce(aud, idToken, "")
 }
 
-//validates idtoken
-//more info: https://developer.apple.com/documentation/signinwithapplerestapi/verifying_a_user
+// validates idtoken
+// more info: https://developer.apple.com/documentation/signinwithapplerestapi/verifying_a_user
 func ValidateIdTokenWithNonce(aud string, idToken string, nonce string) (*SiwaIdToken, string) {
 
 	//initialize the token object

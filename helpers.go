@@ -16,10 +16,10 @@ import (
 
 const APPLE_KEYS_URL = "https://appleid.apple.com/auth/keys"
 
-//global cache for fast subsequent fetching
+// global cache for fast subsequent fetching
 var applePublicKeyObject map[string]*rsa.PublicKey
 
-//key object fetched from APPLE_KEYS_URL
+// key object fetched from APPLE_KEYS_URL
 type AppleKey struct {
 	Kty string `json:"kty"`
 	Kid string `json:"kid"`
@@ -33,7 +33,7 @@ func init() {
 	applePublicKeyObject = make(map[string]*rsa.PublicKey)
 }
 
-//make request to APPLE_KEYS_URL to get the keys
+// make request to APPLE_KEYS_URL to get the keys
 func getApplePublicKeys() ([]AppleKey, error) {
 
 	var c http.Client
@@ -74,7 +74,7 @@ func getApplePublicKeys() ([]AppleKey, error) {
 	return keys.Keys, nil
 }
 
-//get apple public key from the keys array
+// get apple public key from the keys array
 func getApplePublicKey(kid string) *AppleKey {
 
 	var keys []AppleKey
@@ -97,7 +97,7 @@ func getApplePublicKey(kid string) *AppleKey {
 	return nil
 }
 
-//locally cache and get apple rsa.PublicKey object
+// locally cache and get apple rsa.PublicKey object
 func getApplePublicKeyObject(kid string, alg string) *rsa.PublicKey {
 
 	//if computed earlier, return the object
@@ -118,7 +118,7 @@ func getApplePublicKeyObject(kid string, alg string) *rsa.PublicKey {
 	return nil
 }
 
-//function to generate rsa.PublicKey object from encoded modulo and exponent
+// function to generate rsa.PublicKey object from encoded modulo and exponent
 func getPublicKeyObject(base64urlEncodedN string, base64urlEncodedE string) *rsa.PublicKey {
 
 	var pub rsa.PublicKey
@@ -148,7 +148,7 @@ func getPublicKeyObject(base64urlEncodedN string, base64urlEncodedE string) *rsa
 	return &pub
 }
 
-//generate private key from pem encoded string
+// generate private key from pem encoded string
 func getPrivKey(pemEncoded []byte) (*ecdsa.PrivateKey, error) {
 
 	var block *pem.Block
